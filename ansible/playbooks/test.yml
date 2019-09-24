@@ -1,0 +1,36 @@
+- hosts: vm
+  become_method: sudo
+  become_user: root
+  connection: ssh
+
+  tasks:
+    - name: Install packges on centos
+      yum: pkg={{items}} stat=present
+      with items:
+        - htop
+        - iftop
+        - iotop
+        - ncdu
+      when: ansible_distribution == 'CentOS'
+
+    - name: Install packges on ubuntu
+        yum: pkg={{items}} stat=present
+        with items:
+          - htop
+          - iftop
+          - iotop
+          - ncdu
+        when: ansible_distribution == 'Ubuntu'
+
+    - name: copy script file
+      copy: dest=/tmp/script.sh src=script.sh mode=0777
+
+    - name: excute script
+      shell: script.sh > test.txt
+      args:
+        chdir: /tmp
+
+    - fetch: Get the outufile to localhost
+        src: /tmp/test.txt
+        dest: /tmp
+        flat: yes

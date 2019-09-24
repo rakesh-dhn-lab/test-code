@@ -1,0 +1,3 @@
+[vm]
+ip1 ansible_user=cloud-user
+ip2 ansible_user=cloud-user
